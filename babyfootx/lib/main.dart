@@ -33,10 +33,13 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
-  var url;
-  var Data;
+  // var url;
+  // var Data;
   // String res = 'Here';
-  String text = '';
+  // String text = '';
+  String name = "";
+  String final_response = "";
+  final _formkey = GlobalKey<FormState>();
 
   void _incrementCounter() {
     setState(() {
@@ -54,37 +57,49 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            TextField(
-                onChanged: (value) {
-                  url = 'http://127.0.0.1:5000/api?Query=' + value.toString();
-                  setState(() {
-                    // res = url;
-                  });
-                },
-                decoration: InputDecoration(
-                  hintText: 'Search Anything Here',
-                  suffixIcon: GestureDetector(
-                      onTap: () async {
-                        // Data = await http.post('http://127.0.0.1:5000/');
-                        // print(await http.read('http://127.0.0.1:5000/'));
-                        // String response = await myPythonBack();
-                        // var DecodedData = jsonDecode(Data);
-                        setState((){
-                          // text = response;
-                        });
-                      },
-                      child: const Icon(Icons.search,
-                          color: Colors.blue, size: 20)),
-                )),
-            const Text(
-              'You have pushed the button too many times:',
+            const Text("test"),
+            Container(width:350,
+              child: Form(key: _formkey,
+                child: TextFormField(
+                  decoration: InputDecoration(
+                    labelText: 'Enter your name',
+                    enabledBorder: _inputformdeco(),
+                    focusedBorder: _inputformdeco(),
+                  ),
+                ),
+              ),
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-            // Text(res),
-            Text(text)
+            // TextField(
+            //     onChanged: (value) {
+            //       url = 'http://127.0.0.1:5000/api?Query=' + value.toString();
+            //       setState(() {
+            //         // res = url;
+            //       });
+            //     },
+            //     decoration: InputDecoration(
+            //       hintText: 'Search Anything Here',
+            //       suffixIcon: GestureDetector(
+            //           onTap: () async {
+            //             // Data = await http.post('http://127.0.0.1:5000/');
+            //             // print(await http.read('http://127.0.0.1:5000/'));
+            //             String response = await myPythonBack();
+            //             // var DecodedData = jsonDecode(Data);
+            //             setState((){
+            //               text = response;
+            //             });
+            //           },
+            //           child: const Icon(Icons.search,
+            //               color: Colors.blue, size: 20)),
+            //     )),
+            // const Text(
+            //   'You have pushed the button too many times:',
+            // ),
+            // Text(
+            //   '$_counter',
+            //   style: Theme.of(context).textTheme.headline4,
+            // ),
+            // // Text(res),
+            // Text(text)
           ],
         ),
       ),
