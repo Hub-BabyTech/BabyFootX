@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'API.dart';
-// import 'dart:convert';
-// import 'package:http/http.dart' as http;
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 void main() {
   runApp(const MyApp());
@@ -33,13 +32,9 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
-  // var url;
-  // var Data;
-  // String res = 'Here';
-  // String text = '';
-  String name = "";
-  String final_response = "";
-  final _formkey = GlobalKey<FormState>();
+  // String url = "";
+  // String name = "";
+  String greetings = "";
 
   void _incrementCounter() {
     setState(() {
@@ -56,50 +51,53 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text("test"),
-            Container(width:350,
-              child: Form(key: _formkey,
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    labelText: 'Enter your name',
-                    enabledBorder: _inputformdeco(),
-                    focusedBorder: _inputformdeco(),
-                  ),
-                ),
-              ),
+          children: [
+            Text (greetings,
+              style: const TextStyle(fontSize:24, fontWeight: FontWeight.bold)
+            ),
+            Center(
+              child: Container(
+                width:150,
+                height:60,
+                child: ElevatedButton(
+                  onPressed: () async {
+
+                    final response = await http.get(Uri.parse('https://foodish-api.herokuapp.com/api/'));
+
+                    final decoded = json.decode(response.body) as Map<String, dynamic>;
+
+                    setState(() {
+                      greetings = decoded['image'];
+                    });
+
+                  },
+                  child: const Text("Press",style: TextStyle(fontSize:24)),
+                )
+              )
             ),
             // TextField(
             //     onChanged: (value) {
             //       url = 'http://127.0.0.1:5000/api?Query=' + value.toString();
             //       setState(() {
-            //         // res = url;
             //       });
             //     },
             //     decoration: InputDecoration(
             //       hintText: 'Search Anything Here',
             //       suffixIcon: GestureDetector(
             //           onTap: () async {
-            //             // Data = await http.post('http://127.0.0.1:5000/');
-            //             // print(await http.read('http://127.0.0.1:5000/'));
-            //             String response = await myPythonBack();
-            //             // var DecodedData = jsonDecode(Data);
             //             setState((){
-            //               text = response;
             //             });
             //           },
             //           child: const Icon(Icons.search,
             //               color: Colors.blue, size: 20)),
             //     )),
-            // const Text(
-            //   'You have pushed the button too many times:',
-            // ),
-            // Text(
-            //   '$_counter',
-            //   style: Theme.of(context).textTheme.headline4,
-            // ),
-            // // Text(res),
-            // Text(text)
+            const Text(
+              'You have pushed the button too many times:',
+            ),
+            Text(
+              '$_counter',
+              style: Theme.of(context).textTheme.headline4,
+            ),
           ],
         ),
       ),
