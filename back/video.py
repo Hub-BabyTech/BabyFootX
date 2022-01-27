@@ -97,12 +97,12 @@ def displayPicture(img, nb, balloon):
             # if color == "white":
             # b, g, r = int(img[round(pt[0]), round(pt[1])])
             # print("Color : %i %i %i" % (r,g,b))
-            b, g, r = img[round(pt[1]), round(pt[0])]
+            # b, g, r = img[round(pt[1]), round(pt[0])]
             # print("Color : %i %i %i" % (r,g,b))
-            if r > 150 and g > 150 and b > 150 and pt[2] > 25:
-              cv.circle(img, (round(pt[0]), round(pt[1])), round(pt[2]), (0, 255, 0), 2)
-              newBalloon += [round(pt[0]), -round(pt[1])]
-              size += 1
+            # if r > 150 and g > 150 and b > 150 and pt[2] > 25:
+            cv.circle(img, (round(pt[0]), round(pt[1])), round(pt[2]), (0, 255, 0), 2)
+              # newBalloon += [round(pt[0]), -round(pt[1])]
+              # size += 1
         
             # cv.putText(img, color, (int(a + 20), int(b + 20)), cv.FONT_HERSHEY_SIMPLEX, 0.5,
             #             (0, 255, 255))
@@ -121,7 +121,7 @@ def displayPicture(img, nb, balloon):
 
 # Create a VideoCapture object and read from input file
 # If the input is the camera, pass 0 instead of the video file name
-cap = cv.VideoCapture('images/videos/60fps/04.mp4')
+cap = cv.VideoCapture("rtsp://pi:baby_foot@192.168.142.134:8000/")
 
 # Check if camera opened successfully
 if (cap.isOpened()== False): 
