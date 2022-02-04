@@ -31,10 +31,10 @@ for line in f.readlines():
         # ax.add_patch(circ)
         # circ = Circle((x[-1]/1920*750, -y[-1]/1080*584), 3, color="#FFA50064")
         # ax.add_patch(circ)
-        circ = Circle((x[-1]/1920*750, -y[-1]/1080*584), 4, color=cm.hsv(i/200))
+        circ = Circle((x[-1]/640*750, -y[-1]), 4, color=cm.hsv(i/200))
         ax.add_patch(circ)
         # if len(y) >=2:
-        #     plt.plot([x[-2]/1920*750, x[-1]/1920*750], [-y[-2]/1080*584, -y[-1]/1080*584], cm.hsv(i/200))
+        #     plt.plot([x[-2]/640*750, x[-1]/640*750], [-y[-2], -y[-1]], cm.hsv(i/200))
     i+=1
     if i == 200:
         i = 0

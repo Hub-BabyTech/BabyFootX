@@ -18,7 +18,8 @@ app = Flask(__name__)
 
 @app.route('/', methods=['GET'])
 def index():
-    return jsonify({'greetings':'Hi! this is python'})
+    return jsonify([{'id':'0','image':'Hi! this is python'},{'id':'1','image':'that is a test'}])
+    # return jsonify({{'id':'0','name':'test'},{'id':'1','name':'hugo'}})
 
 if __name__ == "__main__":
-    app.run()
+    app.run(host='0.0.0.0', debug=True, port=50162)

@@ -6,8 +6,15 @@ import time
 import cv2 as cv
 import numpy as np
 from matplotlib import pyplot as plt 
+# from app import Baby
 
 start_time = time.time()
+
+score = 23
+
+def getScore():
+  print(score)
+  return score
 
 def detectCirclesWithDp(frame, dp=1):
     blurred = cv.medianBlur(frame, 25)
@@ -60,7 +67,7 @@ def getDominantColor(roi):
         pixelsPerColor.append(count)
 
 def displayPicture(img, nb, balloon):
-    img[0:100,0:100] = [0,0,0]
+    # img[0:100,0:100] = [0,0,0]
     gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
   
     # Blur using 3 * 3 kernel.
@@ -69,7 +76,7 @@ def displayPicture(img, nb, balloon):
     # Apply Hough transform on the blurred image.
     detected_circles = cv.HoughCircles(gray_blurred, 
                     cv.HOUGH_GRADIENT, 1, 20, param1 = 50,
-                param2 = 30, minRadius = 1, maxRadius = 40)
+                param2 = 30, minRadius = 1, maxRadius = 30)
     # print("frame", img)
     # print(detected_circles)
     # mycircle = [0, 0, 0]
@@ -88,7 +95,7 @@ def displayPicture(img, nb, balloon):
         size = 0
         # print(len(detected_circles))
         for pt in detected_circles[0, :]:
-            a, b, r = pt[0], pt[1], pt[2]
+            # a, b, r = pt[0], pt[1], pt[2]
     
             # roi = getROI(img, pt[0], pt[1], pt[2])
             # color = getDominantColor(roi)
@@ -97,11 +104,12 @@ def displayPicture(img, nb, balloon):
             # if color == "white":
             # b, g, r = int(img[round(pt[0]), round(pt[1])])
             # print("Color : %i %i %i" % (r,g,b))
-            # b, g, r = img[round(pt[1]), round(pt[0])]
+            b, g, r = img[round(pt[1]), round(pt[0])]
             # print("Color : %i %i %i" % (r,g,b))
-            # if r > 150 and g > 150 and b > 150 and pt[2] > 25:
-            cv.circle(img, (round(pt[0]), round(pt[1])), round(pt[2]), (0, 255, 0), 2)
-              # newBalloon += [round(pt[0]), -round(pt[1])]
+            if r > 130 and g > 130 and b > 130 and pt[2] > 1:
+              cv.circle(img, (round(pt[0]), round(pt[1])), round(pt[2]), (244, 248, 9), 5)
+              newBalloon += [round(pt[0]), -round(pt[1])]
+              # print(round(pt[0]), -round(pt[1]))
               # size += 1
         
             # cv.putText(img, color, (int(a + 20), int(b + 20)), cv.FONT_HERSHEY_SIMPLEX, 0.5,
@@ -114,48 +122,73 @@ def displayPicture(img, nb, balloon):
             # cv.circle(img, (mycircle[0], mycircle[1]), mycircle[2], (0, 255, 0), 2)
     if size > 1:
         print(size, nb)
+    # cv.resizeWindow(img, 1920, 1080)
+    # video_writer.write(img)
     cv.imshow("Detected Circle", img)
     # sys.exit(0)
+    # return video_writer, balloon+newBalloon, nb+1
     return balloon+newBalloon, nb+1
 
+def babyFoot():
+  global score
+  # foot = Baby()
+  # Create a VideoCapture object and read from input file
+  # If the input is the camera, pass 0 instead of the video file name
+  # cap = cv.VideoCapture("../fifo264")
+  cap = cv.VideoCapture("basicvideo.mp4")
+  # cap = cv.VideoCapture("images/videos/60fps/01.mp4")
+  cv.namedWindow("Test", cv.WND_PROP_FULLSCREEN)
+  # Check if camera opened successfully
+  if (cap.isOpened()== False): 
+    print("Error opening video stream or file")
+  nb = 1
+  balloon = []
 
-# Create a VideoCapture object and read from input file
-# If the input is the camera, pass 0 instead of the video file name
-cap = cv.VideoCapture("rtsp://pi:baby_foot@192.168.142.134:8000/")
 
-# Check if camera opened successfully
-if (cap.isOpened()== False): 
-  print("Error opening video stream or file")
-nb = 1
-balloon = []
-# Read until video is completed
-while(cap.isOpened()):
-  # Capture frame-by-frame
-  ret, frame = cap.read()
-#   print("frame", frame)
-  if ret == True:
+  # fourcc = cv.VideoWriter_fourcc(*'mp4v')  # cv2.VideoWriter_fourcc() does not exist
+  # video_writer = cv.VideoWriter("output.mp4", fourcc, 20, (750, 600))
 
-    # Display the resulting frame
-    balloon, nb = displayPicture(frame, nb, balloon)
-    # cv.imshow('Frame',frame)
+  # Read until video is completed
+  while(cap.isOpened()):
+    score +=1
+    # print("Score Blue :", foot.scoreBlue)
+    # foot.scoreBlue += 1
+    # Capture frame-by-frame
+    ret, frame = cap.read()
+  #   print("frame", frame)
+    if ret == True:
 
-    # Press Q on keyboard to  exit
-    if cv.waitKey(1) & 0xFF == ord('q'):
+      # Display the resulting frame
+      # video_writer, balloon, nb = displayPicture(frame, nb, balloon, video_writer)
+      balloon, nb = displayPicture(frame, nb, balloon)
+      # cv.imshow('Frame',frame)
+
+      # Press Q on keyboard to  exit
+      if cv.waitKey(1) & 0xFF == ord('q'):
+        print(balloon)
+        break
+
+    # Break the loop
+    else: 
       break
 
-  # Break the loop
-  else: 
-    break
+  # video_writer.release()
 
-# When everything done, release the video capture object
-cap.release()
-print('--- %s seconds ---' % (time.time() - start_time))
-print(balloon)
+  # When everything done, release the video capture object
+  cap.release()
+  print('--- %s seconds ---' % (time.time() - start_time))
+  print(balloon)
 
-# Closes all the frames
-cv.destroyAllWindows()
+  # Closes all the frames
+  cv.destroyAllWindows()
 
-f = open("data.txt", "r+")
-for i in balloon:
-  f.write(str(i) + "\n")
-f.close()
+  f = open("data.txt", "w")
+  for i in balloon:
+    f.write(str(i) + "\n")
+  f.close()
+
+# if __name__ == '__main__':
+#   global score
+#   while 1:
+#     # print(score)
+#     score +=1
