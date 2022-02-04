@@ -17,7 +17,7 @@ def hello_world():
     d['Score'] = str("2 - 3")
     d['Red'] = str("34%")
     d['Blue'] = str("66%")
-    d['Ball'] = [[10,10],[40,40],[75,75]]
+    d['Balls'] = [[10,10],[20,30],[50,50],[40,77],[23,45]]
     return jsonify(d) 
 
 if __name__ == '__main__':
